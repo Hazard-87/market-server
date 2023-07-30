@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserEntity } from './entities/user.entity'
+import { RefreshDto } from '../auth/dto/refresh.dto'
 
 @Injectable()
 export class UsersService {
@@ -22,7 +23,17 @@ export class UsersService {
     })
   }
 
+  async findOneByToken(token: string): Promise<UserEntity | undefined> {
+    return this.repository.findOneBy({
+      refresh_token: token
+    })
+  }
+
   update(id: number, dto: UpdateUserDto) {
+    return this.repository.update(id, dto)
+  }
+
+  updateRT(id: number, dto: RefreshDto) {
     return this.repository.update(id, dto)
   }
 

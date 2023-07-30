@@ -15,8 +15,8 @@ import { TextileService } from './textile.service'
 import { TextileEntity } from './entities/textile.entity'
 import { CreateTextileDto, QueryArg } from './dto/create-textile.dto'
 import { UpdateTextileDto } from './dto/update-textile.dto'
-import { Roles } from '../roles/roles.decorator'
-import { Public } from '../roles/public.decorator'
+import { Roles } from '../decorators/roles.decorator'
+import { Public } from '../decorators/public.decorator'
 
 @Controller('textile')
 @ApiTags('textile')

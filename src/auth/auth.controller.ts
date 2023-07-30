@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   HttpCode,
   HttpStatus,
   Patch,
@@ -10,27 +9,36 @@ import {
   Request
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
-import { Public } from '../roles/public.decorator'
-import { CreateUserDto } from '../users/dto/create-user.dto'
+import { Public } from '../decorators/public.decorator'
 import { ApiTags } from '@nestjs/swagger'
 import { UsersService } from '../users/users.service'
 import { UpdateUserDto } from '../users/dto/update-user.dto'
+import { RefreshDto } from './dto/refresh.dto'
+import { LoginDto } from './dto/login.dto'
 
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService, private userService: UsersService) {}
 
+  @Public()
+  @Post('registration')
+  createProfile(@Body() dto: LoginDto) {
+    return this.authService.signOut(dto)
+  }
+
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
+  signIn(@Body() signInDto: LoginDto) {
     return this.authService.signIn(signInDto.username, signInDto.password)
   }
 
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user
+  @HttpCode(HttpStatus.OK)
+  @Public()
+  @Post('refresh')
+  refresh(@Body() dto: RefreshDto) {
+    return this.authService.refresh(dto.refresh_token)
   }
 
   @Patch('profile')
@@ -41,11 +49,5 @@ export class AuthController {
   @Delete('profile')
   removeProfile(@Request() req) {
     return this.userService.remove(req.user.userId)
-  }
-
-  @Public()
-  @Post('registration')
-  createProfile(@Body() dto: CreateUserDto) {
-    return this.authService.signOut(dto)
   }
 }

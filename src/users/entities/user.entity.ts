@@ -18,4 +18,10 @@ export class UserEntity {
   @ApiProperty()
   @Column()
   roles: string
+
+  @ApiProperty()
+  @Column({
+    nullable: true
+  })
+  refresh_token: string
 }

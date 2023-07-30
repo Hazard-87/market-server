@@ -4,13 +4,12 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ServeStaticModule } from '@nestjs/serve-static'
-import { APP_GUARD } from '@nestjs/core'
 
 import { TextileModule } from './textile/textile.module'
 import { TextileEntity } from './textile/entities/textile.entity'
 import { AuthModule } from './auth/auth.module'
-import { AuthGuard } from './auth/auth.guard'
 import { UsersModule } from './users/users.module'
+import { UserEntity } from './users/entities/user.entity'
 
 @Module({
   imports: [
@@ -25,7 +24,7 @@ import { UsersModule } from './users/users.module'
       username: 'Hazard-87',
       password: 'bE4KCHFePSr3',
       database: 'marketdb',
-      entities: [TextileEntity],
+      entities: [TextileEntity, UserEntity],
       ssl: true,
       synchronize: true
     }),
@@ -35,13 +34,6 @@ import { UsersModule } from './users/users.module'
   ],
 
   controllers: [AppController],
-  providers: [
-    AppService
-    //TODO: раскомментировать чтобы включить глобальную защиту
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AuthGuard
-    // }
-  ]
+  providers: [AppService]
 })
 export class AppModule {}

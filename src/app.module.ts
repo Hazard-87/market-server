@@ -5,11 +5,11 @@ import { AppService } from './app.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ServeStaticModule } from '@nestjs/serve-static'
 
-import { TextileModule } from '../textile/textile.module'
-import { TextileEntity } from '../textile/entities/textile.entity'
-import { AuthModule } from '../auth/auth.module'
-import { UsersModule } from '../users/users.module'
-import { UserEntity } from '../users/entities/user.entity'
+import { TextileModule } from './textile/textile.module'
+import { TextileEntity } from './textile/entities/textile.entity'
+import { AuthModule } from './auth/auth.module'
+import { UsersModule } from './users/users.module'
+import { UserEntity } from './users/entities/user.entity'
 
 @Module({
   imports: [

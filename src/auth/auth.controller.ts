@@ -2,18 +2,20 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
   Patch,
   Post,
-  Request
+  Request,
+  Res,
+  Req
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { Public } from '../decorators/public.decorator'
 import { ApiTags } from '@nestjs/swagger'
 import { UsersService } from '../users/users.service'
 import { UpdateUserDto } from '../users/dto/update-user.dto'
-import { RefreshDto } from './dto/refresh.dto'
 import { LoginDto } from './dto/login.dto'
 
 @Controller('auth')
@@ -23,22 +25,22 @@ export class AuthController {
 
   @Public()
   @Post('registration')
-  createProfile(@Body() dto: LoginDto) {
-    return this.authService.signOut(dto)
+  createProfile(@Request() req, @Body() dto: LoginDto, @Res({ passthrough: true }) res) {
+    return this.authService.signOut(dto, res)
   }
 
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('login')
-  signIn(@Body() signInDto: LoginDto) {
-    return this.authService.signIn(signInDto.username, signInDto.password)
+  signIn(@Request() req, @Body() dto: LoginDto, @Res({ passthrough: true }) res) {
+    return this.authService.signIn(dto.username, dto.password, res)
   }
 
   @HttpCode(HttpStatus.OK)
   @Public()
-  @Post('refresh')
-  refresh(@Body() dto: RefreshDto) {
-    return this.authService.refresh(dto.refresh_token)
+  @Get('refresh')
+  refresh(@Req() req, @Res({ passthrough: true }) res) {
+    return this.authService.refresh(req, res)
   }
 
   @Patch('profile')

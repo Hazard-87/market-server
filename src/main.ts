@@ -8,12 +8,14 @@ async function bootstrap() {
   app.setGlobalPrefix('/api')
   // app.use(cookieParser())
 
-  // app.enableCors({
-  //   origin: ['http://localhost:5173', '*'],
-  //   allowedHeaders: '*',
-  //   methods: 'GET,PUT,PATCH,POST,DELETE,UPDATE,OPTIONS',
-  //   credentials: true
-  // })
+  app.enableCors({
+    origin: ['http://localhost:5173', '*'],
+    allowedHeaders: ['Accept', 'Content-Type'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    credentials: true
+  })
   // app.use((req, res, next) => {
   //   res.header('Access-Control-Allow-Origin', '*')
   //   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,PATCH,DELETE,OPTIONS')

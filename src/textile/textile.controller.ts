@@ -25,7 +25,7 @@ export class TextileController {
 
   @HttpCode(HttpStatus.OK)
   @Post()
-  @Roles('admin')
+  // @Roles('admin')
   create(@Body() createTextileDto: CreateTextileDto) {
     return this.textileService.create(createTextileDto)
   }
@@ -44,13 +44,13 @@ export class TextileController {
   }
 
   @Patch(':id')
-  @Roles('admin')
+  // @Roles('admin')
   update(@Param('id') id: string, @Body() updateTextileDto: UpdateTextileDto) {
     return this.textileService.update(+id, updateTextileDto)
   }
 
   @Delete(':id')
-  @Roles('admin')
+  // @Roles('admin')
   remove(@Param('id') id: string) {
     return this.textileService.remove(+id)
   }

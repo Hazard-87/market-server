@@ -9,11 +9,11 @@ async function bootstrap() {
   app.setGlobalPrefix('/api')
   app.use(cookieParser())
 
-  app.enableCors({
-    origin: ['http://localhost:5173', '*'],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    credentials: true
-  })
+  // app.enableCors({
+  //   origin: ['http://localhost:5173', '*'],
+  //   methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  //   credentials: true
+  // })
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
 
   const config = new DocumentBuilder()

@@ -9,7 +9,7 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 import { TextileModule } from './textile/textile.module'
 import { AuthModule } from './auth/auth.module'
 import { UsersModule } from './users/users.module'
-
+import { ImageModule } from './image/image.module'
 // import { FurnituresModule } from './furnitures/furnitures.module'
 
 @Module({
@@ -38,7 +38,8 @@ import { UsersModule } from './users/users.module'
     }),
     TextileModule,
     AuthModule,
-    UsersModule
+    UsersModule,
+    ImageModule
     // FurnituresModule
   ],
 

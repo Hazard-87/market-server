@@ -18,8 +18,8 @@ import { UpdateTextileDto } from './dto/update-textile.dto'
 import { Roles } from '../decorators/roles.decorator'
 import { Public } from '../decorators/public.decorator'
 
-@Controller('textile')
-@ApiTags('textile')
+@Controller('textiles')
+@ApiTags('textiles')
 export class TextileController {
   constructor(private readonly textileService: TextileService) {}
 

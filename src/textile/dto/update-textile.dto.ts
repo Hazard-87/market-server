@@ -1,16 +1,33 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { CreateTextileDto } from './create-textile.dto'
+import { ApiProperty } from '@nestjs/swagger'
+import { Column } from 'typeorm'
+import { ImageEntity } from '../../image/entities/image.entity'
 
-export class UpdateTextileDto extends PartialType(CreateTextileDto) {
+export class UpdateTextileDto {
   @ApiProperty()
+  @Column({ nullable: true })
   name: string
 
   @ApiProperty()
-  description: string
+  @Column({ nullable: true })
+  vendorCode: string
 
   @ApiProperty()
+  @Column({ nullable: true })
+  width: string
+
+  @ApiProperty()
+  @Column({ nullable: true })
+  material: string
+
+  @ApiProperty()
+  @Column({ nullable: true })
   price: number
 
   @ApiProperty()
-  image: string
+  @Column({ nullable: true })
+  textileTypeID: number
+
+  @ApiProperty()
+  @Column({ nullable: true })
+  images: number[]
 }

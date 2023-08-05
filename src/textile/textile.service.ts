@@ -2,18 +2,22 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Brackets, Repository } from 'typeorm'
 import { CreateTextileDto } from './dto/create-textile.dto'
-import { UpdateTextileDto } from './dto/update-textile.dto'
 import { TextileEntity } from './entities/textile.entity'
+import { ImageService } from '../image/image.service'
+import { ImageEntity } from '../image/entities/image.entity'
+import { UpdateTextileDto } from './dto/update-textile.dto'
 
 @Injectable()
 export class TextileService {
   constructor(
+    private imageRepository: ImageService,
     @InjectRepository(TextileEntity)
     private repository: Repository<TextileEntity>
   ) {}
 
-  create(dto: CreateTextileDto) {
-    return this.repository.save(dto)
+  async create(dto: CreateTextileDto) {
+    const images = await this.imageRepository.findImagesByIds(dto.images)
+    return this.repository.save({ ...dto, images })
   }
 
   findByIds(id) {
@@ -71,8 +75,9 @@ export class TextileService {
     }
   }
 
-  update(id: number, dto: UpdateTextileDto) {
-    return this.repository.update(id, dto)
+  async update(id: number, dto: UpdateTextileDto) {
+    const images = (await this.imageRepository.findImagesByIds(dto.images)) as ImageEntity[]
+    return this.repository.update(id, { ...dto, images })
   }
 
   remove(id: number) {

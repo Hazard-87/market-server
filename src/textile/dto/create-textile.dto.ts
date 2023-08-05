@@ -1,17 +1,28 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { ImageEntity } from '../../image/entities/image.entity'
+import { Column } from 'typeorm'
 
 export class CreateTextileDto {
   @ApiProperty()
   name: string
 
   @ApiProperty()
-  description: string
+  vendorCode: string
+
+  @ApiProperty()
+  width: string
+
+  @ApiProperty()
+  material: string
 
   @ApiProperty()
   price: number
 
   @ApiProperty()
-  image: string
+  textileTypeID: number
+
+  @ApiProperty()
+  images: number[]
 }
 
 export class QueryArg {

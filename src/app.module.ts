@@ -4,20 +4,20 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ServeStaticModule } from '@nestjs/serve-static'
-// import { GraphQLModule } from '@nestjs/graphql'
-// import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
+import { GraphQLModule } from '@nestjs/graphql'
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 
 import { TextileModule } from './textile/textile.module'
 import { AuthModule } from './auth/auth.module'
 import { UsersModule } from './users/users.module'
-// import { FurnituresModule } from './furnitures/furnitures.module'
+import { FurnituresModule } from './furnitures/furnitures.module'
 
 @Module({
   imports: [
-    // GraphQLModule.forRoot<ApolloDriverConfig>({
-    //   driver: ApolloDriver,
-    //   autoSchemaFile: 'schema.gql'
-    // }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: 'schema.gql'
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'swagger-static'),
       serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/swagger'
@@ -36,8 +36,8 @@ import { UsersModule } from './users/users.module'
     }),
     TextileModule,
     AuthModule,
-    UsersModule
-    // FurnituresModule/
+    UsersModule,
+    FurnituresModule
   ],
 
   controllers: [AppController],

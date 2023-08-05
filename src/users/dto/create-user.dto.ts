@@ -1,12 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { Column } from 'typeorm'
 
 export class CreateUserDto {
   @ApiProperty()
-  username: string
+  @Column()
+  email: string
 
   @ApiProperty()
+  @Column()
   password: string
 
   @ApiProperty()
-  roles: 'client' | 'admin'
+  @Column({ nullable: true })
+  firstname: string
+
+  @ApiProperty()
+  @Column({ nullable: true })
+  lastname: string
+
+  @ApiProperty()
+  @Column({ nullable: true })
+  phone: string
 }

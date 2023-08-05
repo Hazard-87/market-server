@@ -1,8 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
 import { UsersService } from '../users/users.service'
-import { LoginDto } from './dto/login.dto'
+import { CreateUserDto } from '../users/dto/create-user.dto'
 
 @Injectable()
 export class AuthService {
@@ -10,8 +10,8 @@ export class AuthService {
 
   saltOrRounds = 10
 
-  async signIn(username: string, pass: string, res: any): Promise<any> {
-    const user = await this.repository.findOne(username)
+  async signIn(email: string, pass: string, res: any): Promise<any> {
+    const user = await this.repository.findOneByEmail(email)
     if (!user) {
       throw new UnauthorizedException('Неверный email или пароль')
     }
@@ -21,7 +21,7 @@ export class AuthService {
       throw new UnauthorizedException('Неверный email или пароль')
     }
 
-    const payload = { userId: user.id, username: user.username, roles: user.roles }
+    const payload = { userId: user.id, username: user.email, roles: user.roles }
     await this.setCookie(res, payload, user.id)
     return {
       access_token: await this.jwtService.signAsync(payload)
@@ -40,24 +40,29 @@ export class AuthService {
       throw new UnauthorizedException('Невалидная сессия')
     }
 
-    const payload = { userId: user.id, username: user.username, roles: user.roles }
+    const payload = { userId: user.id, username: user.email, roles: user.roles }
     await this.setCookie(res, payload, user.id)
     return {
       access_token: await this.jwtService.signAsync(payload)
     }
   }
 
-  async signOut(dto: LoginDto, res: any): Promise<any> {
-    const candidate = await this.repository.findOne(dto.username)
+  async signOut(dto: CreateUserDto, res: any): Promise<any> {
+    if (!dto.email) {
+      throw new NotFoundException(`Поле email обязательное`)
+    } else if (!dto.password) {
+      throw new NotFoundException(`Поле password обязательное`)
+    }
+    const candidate = await this.repository.findOneByEmail(dto.email)
     if (candidate) {
-      throw new UnauthorizedException(
-        `Пользователь с почтовым адресом ${dto.username} уже зарегистрирован`
+      throw new NotFoundException(
+        `Пользователь с почтовым адресом ${dto.email} уже зарегистрирован`
       )
     }
 
     const hashPassword = await bcrypt.hash(dto.password, this.saltOrRounds)
-    const user = await this.repository.create({ ...dto, password: hashPassword, roles: 'client' })
-    const payload = { userId: user.id, username: user.username, roles: user.roles }
+    const user = await this.repository.create({ ...dto, password: hashPassword })
+    const payload = { userId: user.id, username: user.email, roles: user.roles }
     await this.setCookie(res, payload, user.id)
     return {
       access_token: await this.jwtService.signAsync(payload)

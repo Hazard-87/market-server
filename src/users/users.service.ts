@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm'
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
@@ -14,13 +14,17 @@ export class UsersService {
   ) {}
 
   create(dto: CreateUserDto) {
-    return this.repository.save(dto)
+    return this.repository.save({ ...dto, roles: 'client' })
   }
 
-  async findOne(username: string): Promise<UserEntity | undefined> {
+  async findOneByEmail(email: string): Promise<UserEntity | undefined> {
     return this.repository.findOneBy({
-      username
+      email
     })
+  }
+
+  async findOneById(id: number): Promise<UserEntity | undefined> {
+    return this.repository.findOneById(id)
   }
 
   async findOneByToken(token: string): Promise<UserEntity | undefined> {
@@ -37,7 +41,11 @@ export class UsersService {
     return this.repository.update(id, dto)
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    const user = await this.repository.findOneById(+id)
+    if (!user) {
+      throw new NotFoundException('Такой пользователь не найден')
+    }
     return this.repository.delete(id)
   }
 }

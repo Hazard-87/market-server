@@ -1,0 +1,31 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type FurnitureEntity {
+  id: ID!
+  name: String!
+  description: String!
+}
+
+type Query {
+  getOneFurniture(id: Float!): FurnitureEntity!
+  getAllFurnitures(offset: Int! = 0, limit: Int! = 25): [FurnitureEntity!]!
+}
+
+type Mutation {
+  createFurniture(createFurnitureInput: CreateFurnitureInput!): FurnitureEntity!
+  updateFurniture(updateFurnitureInput: UpdateFurnitureInput!): FurnitureEntity!
+  removeFurniture(id: Int!): FurnitureEntity!
+}
+
+input CreateFurnitureInput {
+  name: String!
+  description: String!
+}
+
+input UpdateFurnitureInput {
+  id: ID!
+  name: String
+  description: String
+}

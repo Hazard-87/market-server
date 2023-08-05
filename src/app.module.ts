@@ -4,15 +4,20 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ServeStaticModule } from '@nestjs/serve-static'
+import { GraphQLModule } from '@nestjs/graphql'
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 
 import { TextileModule } from './textile/textile.module'
-import { TextileEntity } from './textile/entities/textile.entity'
 import { AuthModule } from './auth/auth.module'
 import { UsersModule } from './users/users.module'
-import { UserEntity } from './users/entities/user.entity'
+import { FurnituresModule } from './furnitures/furnitures.module'
 
 @Module({
   imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: 'schema.gql'
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'swagger-static'),
       serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/swagger'
@@ -24,13 +29,15 @@ import { UserEntity } from './users/entities/user.entity'
       username: 'Hazard-87',
       password: 'bE4KCHFePSr3',
       database: 'marketdb',
-      entities: [TextileEntity, UserEntity],
+      entities: [__dirname + 'dist/**/*.entity{.ts,.js}'],
       ssl: true,
+      autoLoadEntities: true,
       synchronize: true
     }),
     TextileModule,
     AuthModule,
-    UsersModule
+    UsersModule,
+    FurnituresModule
   ],
 
   controllers: [AppController],

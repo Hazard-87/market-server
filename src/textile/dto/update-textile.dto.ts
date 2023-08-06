@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Column } from 'typeorm'
-import { ImageEntity } from '../../image/entities/image.entity'
 
 export class UpdateTextileDto {
   @ApiProperty()
@@ -13,7 +12,7 @@ export class UpdateTextileDto {
 
   @ApiProperty()
   @Column({ nullable: true })
-  width: string
+  width: number
 
   @ApiProperty()
   @Column({ nullable: true })
@@ -21,11 +20,15 @@ export class UpdateTextileDto {
 
   @ApiProperty()
   @Column({ nullable: true })
+  manufacturer: string
+
+  @ApiProperty()
+  @Column({ nullable: true })
   price: number
 
   @ApiProperty()
   @Column({ nullable: true })
-  textileTypeID: number
+  textileTypeId: number
 
   @ApiProperty()
   @Column({ nullable: true })

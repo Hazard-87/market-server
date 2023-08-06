@@ -35,9 +35,9 @@ export class TextileController {
     type: [TextileEntity]
   })
   @Get()
-  findByParams(@Query('id') id?: string | string[], @Query() query?: QueryArg) {
-    if (id) {
-      return this.textileService.findByIds(id)
+  findByParams(@Query() query?: QueryArg) {
+    if (query.id) {
+      return this.textileService.findOne(query.id)
     } else {
       return this.textileService.findAll(query)
     }

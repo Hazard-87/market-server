@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { ApiProperty } from '@nestjs/swagger'
 import { ImageEntity } from '../../image/entities/image.entity'
 
@@ -18,11 +18,15 @@ export class TextileEntity {
 
   @ApiProperty()
   @Column()
-  width: string
+  width: number
 
   @ApiProperty()
   @Column()
   material: string
+
+  @ApiProperty()
+  @Column()
+  manufacturer: string
 
   @ApiProperty()
   @Column()
@@ -33,7 +37,7 @@ export class TextileEntity {
     type: 'integer',
     nullable: false
   })
-  textileTypeID: number
+  textileTypeId: number
 
   @ApiProperty({ type: [ImageEntity] })
   @Column({
@@ -42,6 +46,5 @@ export class TextileEntity {
     default: [],
     nullable: false
   })
-  @JoinColumn()
-  public images: ImageEntity[]
+  images: number[]
 }

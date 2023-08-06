@@ -32,7 +32,6 @@ export class ImageController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTextileImageDto: UpdateImageDto) {
-    //todo поменять на файл
     return this.imageService.update(+id, updateTextileImageDto)
   }
 

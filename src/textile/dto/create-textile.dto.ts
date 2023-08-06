@@ -1,6 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { ImageEntity } from '../../image/entities/image.entity'
-import { Column } from 'typeorm'
 
 export class CreateTextileDto {
   @ApiProperty()
@@ -10,24 +8,27 @@ export class CreateTextileDto {
   vendorCode: string
 
   @ApiProperty()
-  width: string
+  width: number
 
   @ApiProperty()
   material: string
 
   @ApiProperty()
+  manufacturer: string
+
+  @ApiProperty()
   price: number
 
   @ApiProperty()
-  textileTypeID: number
+  textileTypeId: number
 
   @ApiProperty()
   images: number[]
 }
 
 export class QueryArg {
-  @ApiProperty({ required: false, type: Number, isArray: true })
-  id: number | number[]
+  @ApiProperty({ required: false, type: Number })
+  id: number
 
   @ApiProperty({
     required: false,

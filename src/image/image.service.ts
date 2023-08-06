@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { UpdateImageDto } from './dto/update-image.dto'
+import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { ImageEntity } from './entities/image.entity'
-import { InjectRepository } from '@nestjs/typeorm'
+import { UpdateImageDto } from './dto/update-image.dto'
+import { CreateImageDto } from './dto/create-image.dto'
 
 @Injectable()
 export class ImageService {
@@ -17,7 +18,7 @@ export class ImageService {
 
   create(file: Express.Multer.File) {
     const base64str = this.base64_encode(file.buffer)
-    const dto = {
+    const dto: CreateImageDto = {
       url: base64str
     }
     return this.repository.save(dto)

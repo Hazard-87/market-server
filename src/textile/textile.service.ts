@@ -1,35 +1,39 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Brackets, Repository } from 'typeorm'
-import { CreateTextileDto } from './dto/create-textile.dto'
 import { TextileEntity } from './entities/textile.entity'
 import { ImageService } from '../image/image.service'
-import { ImageEntity } from '../image/entities/image.entity'
 import { UpdateTextileDto } from './dto/update-textile.dto'
+import { CreateTextileDto } from './dto/create-textile.dto'
 
 @Injectable()
 export class TextileService {
   constructor(
-    private imageRepository: ImageService,
+    private imageService: ImageService,
     @InjectRepository(TextileEntity)
     private repository: Repository<TextileEntity>
   ) {}
 
   async create(dto: CreateTextileDto) {
-    const images = await this.imageRepository.findImagesByIds(dto.images)
-    return this.repository.save({ ...dto, images })
+    const result = await this.repository.save(dto)
+    return await this.findOne(result.id)
   }
 
-  findByIds(id) {
-    return this.repository.findByIds(id)
+  async findOne(id: number) {
+    const result = await this.repository.findOneById(id)
+    const images = await this.imageService.findImagesByIds(result.images)
+    return {
+      ...result,
+      images
+    }
   }
 
   async findAll(query) {
     const limit = 10
 
     const qb = this.repository
-      .createQueryBuilder('textile')
-      .orderBy('textile.id', query.order || 'ASC')
+      .createQueryBuilder('textiles')
+      .orderBy('textiles.id', query.order || 'ASC')
 
     if (!query.limit) {
       qb.take(limit)
@@ -69,18 +73,36 @@ export class TextileService {
 
     const [result, total] = await qb.getManyAndCount()
 
+    let IDs = []
+    result.map((res) => {
+      const ids = res.images.map((image) => image)
+      IDs = [...IDs, ...ids]
+    })
+
+    const images = await this.imageService.findImagesByIds(IDs)
+
+    const data = result.map((res) => {
+      return {
+        ...res,
+        images: images.filter((image) => res.images.some((img) => img === image.id))
+      }
+    })
+
     return {
-      result,
+      result: data,
       total
     }
   }
 
   async update(id: number, dto: UpdateTextileDto) {
-    const images = (await this.imageRepository.findImagesByIds(dto.images)) as ImageEntity[]
-    return this.repository.update(id, { ...dto, images })
+    await this.repository.update(id, { ...dto })
+    return this.findOne(id)
   }
 
-  remove(id: number) {
-    return this.repository.delete(id)
+  async remove(id: number) {
+    await this.repository.delete(id)
+    return {
+      status: 'OK'
+    }
   }
 }

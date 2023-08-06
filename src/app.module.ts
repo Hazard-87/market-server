@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module'
 import { UsersModule } from './users/users.module'
 import { ImageModule } from './image/image.module'
 // import { FurnituresModule } from './furnitures/furnitures.module'
+import { TextileTypesModule } from './textile-types/textile-types.module';
 
 @Module({
   imports: [
@@ -39,7 +40,8 @@ import { ImageModule } from './image/image.module'
     TextileModule,
     AuthModule,
     UsersModule,
-    ImageModule
+    ImageModule,
+    TextileTypesModule
     // FurnituresModule
   ],
 

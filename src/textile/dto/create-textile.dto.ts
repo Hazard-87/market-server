@@ -30,6 +30,9 @@ export class QueryArg {
   @ApiProperty({ required: false, type: Number })
   id: number
 
+  @ApiProperty({ required: false, type: Number, isArray: true })
+  textileTypeId: number
+
   @ApiProperty({
     required: false,
     oneOf: [{ type: 'number' }, { type: 'all' }]

@@ -12,14 +12,26 @@ import {
 import { ImageService } from './image.service'
 import { UpdateImageDto } from './dto/update-image.dto'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger'
 
 @Controller('images')
 @ApiTags('images')
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
-  @Post()
+  @Post('upload')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        image: {
+          type: 'string',
+          format: 'binary'
+        }
+      }
+    }
+  })
   @UseInterceptors(FileInterceptor('image'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     return this.imageService.create(file)

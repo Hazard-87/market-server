@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { ImageEntity } from './entities/image.entity'
-import { UpdateImageDto } from './dto/update-image.dto'
 import { CreateImageDto } from './dto/create-image.dto'
+import { UpdateImageDto } from './dto/update-image.dto'
 
 @Injectable()
 export class ImageService {

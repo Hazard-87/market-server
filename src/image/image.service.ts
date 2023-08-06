@@ -37,8 +37,8 @@ export class ImageService {
   }
 
   async remove(id: number) {
-    const image = await this.repository.findOneById(+id)
-    if (!image) {
+    const result = await this.findOne(id)
+    if (!result) {
       throw new NotFoundException('Такой файл не найден')
     }
     return this.repository.delete(id)

@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm'
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { TextileTypeEntity } from './entities/textile-type.entity'
 import { CreateTextileTypeDto } from './dto/create-textile-type.dto'
@@ -37,6 +37,10 @@ export class TextileTypesService {
   }
 
   async remove(id: number) {
+    const result = await this.findOne(id)
+    if (!result) {
+      throw new NotFoundException('Такой файл не найден')
+    }
     await this.repository.delete(id)
     return {
       status: 'OK'

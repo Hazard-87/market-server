@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
 import { UsersService } from '../users/users.service'
 import { CreateUserDto } from '../users/dto/create-user.dto'
+import { UpdateUserDto } from '../users/dto/update-user.dto'
 
 @Injectable()
 export class AuthService {
@@ -67,6 +68,19 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(payload)
     }
+  }
+
+  async update(token: string, dto: UpdateUserDto) {
+    const user = await this.repository.findOneByToken(token)
+    if (!user) {
+      throw new UnauthorizedException('Невалидная сессия')
+    }
+
+    if (dto.password) {
+      dto.password = await bcrypt.hash(dto.password, this.saltOrRounds)
+    }
+
+    return this.repository.update(user.id, dto)
   }
 
   async setCookie(res: any, payload: any, userId: number) {

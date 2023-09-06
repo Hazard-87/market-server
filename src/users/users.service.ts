@@ -24,16 +24,21 @@ export class UsersService {
   }
 
   async findOneById(id: number): Promise<UserEntity | undefined> {
-    return this.repository.findOneById(id)
+    return await this.repository.findOneById(id)
   }
 
   async findOneByToken(token: string): Promise<UserEntity | undefined> {
-    return this.repository.findOneBy({
+    const user = await this.repository.findOneBy({
       refresh_token: token
     })
+    delete user.refresh_token
+    return {
+      ...user,
+      password: null
+    }
   }
 
-  update(id: number, dto: UpdateUserDto) {
+  async update(id: number, dto: UpdateUserDto) {
     return this.repository.update(id, dto)
   }
 
@@ -41,11 +46,11 @@ export class UsersService {
     return this.repository.update(id, dto)
   }
 
-  async remove(id: number) {
-    const user = await this.repository.findOneById(+id)
+  async remove(token: string) {
+    const user = await this.findOneByToken(token)
     if (!user) {
       throw new NotFoundException('Такой пользователь не найден')
     }
-    return this.repository.delete(id)
+    return this.repository.delete(user.id)
   }
 }

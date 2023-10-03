@@ -85,7 +85,7 @@ export class AuthService {
 
   async setCookie(res: any, payload: any, userId: number) {
     const token = await this.jwtService.signAsync(payload, {
-      expiresIn: '600s'
+      expiresIn: '360s'
     })
     await this.repository.updateRT(userId, {
       refresh_token: token

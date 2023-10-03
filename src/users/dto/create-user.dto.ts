@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Column } from 'typeorm'
+import { TRoles } from '../../decorators/roles.decorator'
+import { UserRoles } from '../entities/user.entity'
 
 export class CreateUserDto {
   @ApiProperty()
@@ -9,6 +11,13 @@ export class CreateUserDto {
   @ApiProperty()
   @Column()
   password: string
+
+  @ApiProperty()
+  @Column({
+    type: 'enum',
+    enum: UserRoles
+  })
+  roles: UserRoles
 
   @ApiProperty()
   @Column({ nullable: true })

@@ -14,7 +14,7 @@ export class UsersService {
   ) {}
 
   create(dto: CreateUserDto) {
-    return this.repository.save({ ...dto, roles: 'client' })
+    return this.repository.save({ ...dto })
   }
 
   async findOneByEmail(email: string): Promise<UserEntity | undefined> {

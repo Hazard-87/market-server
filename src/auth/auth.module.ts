@@ -18,21 +18,21 @@ import { RolesGuard } from '../guards/roles.guard'
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '300s' }
+      signOptions: { expiresIn: '180s' }
     })
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
-    UsersService
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AuthGuard
-    // },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: RolesGuard
-    // }
+    UsersService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard
+    }
   ],
   exports: [AuthService]
 })
